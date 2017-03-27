@@ -13,10 +13,14 @@
 import numpy as np
 import os
 import sys
+sys.path.append("../../lab1/solution")
+from proto import *
 from pysndfile import sndio
 
-for tidigitsroot in ['/home/giampi/corpora/tidigits/disc_4.1.1/tidigits/train/',
-                     '/afs/nada.kth.se/dept/tmh/corpora/tidigits/disc_4.1.1/tidigits/train/']:
+for tidigitsroot in ['/home/giampi/corpora/tidigits/disc_4.2.1/tidigits/test/',
+                     '/afs/nada.kth.se/dept/tmh/corpora/tidigits/disc_4.2.1/tidigits/test/']:
+#for tidigitsroot in ['/home/giampi/corpora/tidigits/disc_4.1.1/tidigits/train/',
+#                     '/afs/nada.kth.se/dept/tmh/corpora/tidigits/disc_4.1.1/tidigits/train/']:
     if os.path.exists(tidigitsroot):
         break
     else:
@@ -24,7 +28,8 @@ for tidigitsroot in ['/home/giampi/corpora/tidigits/disc_4.1.1/tidigits/train/',
     raise NameError('TIDIGITS root directory not found on system')
 
 genders = ["man", "woman"]
-speakers = ["ae", "ac"]
+speakers = ["bm", "ew"]
+#speakers = ["ae", "ac"]
 
 digits = ["o", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 repetitions = ["a", "b"]
@@ -40,13 +45,15 @@ for idx in range(len(speakers)):
             # to get similar results as from Kaldi or HTK
             samples = np.array(sndobj[0])*np.iinfo(np.int16).max
             samplingrate = sndobj[1]
+            ceps = mfcc(samples)
             tidigits.append({"filename": filename,
                              "samplingrate": samplingrate,
                              "gender": genders[idx],
                              "speaker": speakers[idx],
                              "digit": digit,
                              "repetition": repetition,
-                             "samples": samples})
+                             "samples": samples,
+                             "mfcc": ceps})
 
 if sys.version_info.major==3:
     np.savez('tidigits_python3.npz', tidigits=tidigits)

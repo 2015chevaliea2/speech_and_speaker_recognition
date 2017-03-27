@@ -1,5 +1,6 @@
 from tools import *
 from proto import *
+import numpy as np
 from matplotlib.pyplot import imshow
 
 tidigits = np.load( 'tidigits_python3.npz' )[ 'tidigits' ]
@@ -40,11 +41,11 @@ for i in range (len(tidigits)):
 #imshow(mfccs[33], aspect='auto', interpolation='nearest', origin='lower')
     
 ##concatenate mfcc in one feature
-feature = []
-for i in range (len(tidigits)):
-    mfcci = mfcc(tidigits[i].get('samples'))[0]
-    for k in range (len(mfcci)):
-        feature.append(mfcci[k])
+# feature = []
+# for i in range (len(tidigits)):
+#     mfcci = mfcc(tidigits[i].get('samples'))[0]
+#     for k in range (len(mfcci)):
+#         feature.append(mfcci[k])
 
 ##concatenate mspec in one feature
 # feature = []
@@ -55,5 +56,26 @@ for i in range (len(tidigits)):
 
 ##Correlation coefficient
 
-correlation_matrix = np.corrcoef(np.array(feature))
+# correlation_matrix = np.corrcoef(np.array(feature))
+
+def dist (a,b):
+    n, m  = len(a), len(b)
+    mat = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            mat[i,j] = np.linalg.norm(a[i]-b[j])
+    return(mat)
+    
+a = tidigits[0].get('samples')
+b = tidigits[1].get('samples')
+#c = distances(a,b)
+#imshow(c)
+
+D = len(tidigits)
+M = np.zeros((D,D))
+for i in range(D):
+    for j in range(D):
+        M[i,j] = dtw(dist(mfcc(tidigits[i].get('samples'))[0],mfcc(tidigits[j].get('samples'))[0]))
+
+imshow(M)
 

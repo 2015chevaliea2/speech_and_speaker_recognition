@@ -1,30 +1,6 @@
 import numpy as np
-
 # DT2118, Lab 1 Feature Extraction
 # - Functions given by the exercise -------------------------------------------- 
-
-def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate=20000, liftercoeff=22):
-    """Computes Mel Frequency Cepstrum Coefficients.
-
-    Args:
-        samples: array of speech samples with shape (N,)
-        winlen: lenght of the analysis window
-        winshift: number of samples to shift the analysis window at every time step
-        nfft: length of the Fast Fourier Transform (power of 2, >= winlen)
-        nceps: number of cepstrum coefficients to compute
-        samplingrate: sampling rate of the original signal
-        liftercoeff: liftering coefficient used to equalise scale of MFCCs
-
-    Returns:
-        N x nceps array with lifetered MFCC coefficients
-    """
-    frames = enframe(samples, winlen, winshift)
-    preemph = preemp(frames, 0.97)
-    windowed = windowing(preemph)
-    spec = powerSpectrum(windowed, nfft)
-    mspec = logMelSpectrum(spec, samplingrate)
-    ceps = cepstrum(mspec, nceps)
-    return lifter(ceps, liftercoeff)
 
 def tidigit2labels(tidigitsarray):
     """
@@ -123,3 +99,11 @@ def trfbank(fs, nfft, lowfreq=133.33, linsc=200/3., logsc=1.0711703, nlinfilt=13
         fbank[i][rid] = rslope * (hi - nfreqs[rid])
 
     return fbank
+
+def dist (a,b):
+    n, m  = len(a), len(b)
+    mat = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            mat[i,j] = np.linalg.norm(a[i]-b[j])
+    return(mat)

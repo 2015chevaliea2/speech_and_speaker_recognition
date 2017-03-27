@@ -1,10 +1,39 @@
 # DT2118, Lab 1 Feature Extraction
-# Functions to be implemented ----------------------------------
-import numpy as np
-from scipy.signal import *
+from scipy.signal import lfilter
+from scipy.signal import hamming
 from scipy.fftpack import fft
-from tools import *
+from tools import trfbank
 from scipy.fftpack.realtransforms import dct
+from tools import dist
+import numpy as np
+
+# Function given by the exercise ----------------------------------
+
+def mfcc(samples, winlen = 400, winshift = 200, preempcoeff=0.97, nfft=512, nceps=13, samplingrate=20000, liftercoeff=22):
+    """Computes Mel Frequency Cepstrum Coefficients.
+
+    Args:
+        samples: array of speech samples with shape (N,)
+        winlen: lenght of the analysis window
+        winshift: number of samples to shift the analysis window at every time step
+        preempcoeff: pre-emphasis coefficient
+        nfft: length of the Fast Fourier Transform (power of 2, >= winlen)
+        nceps: number of cepstrum coefficients to compute
+        samplingrate: sampling rate of the original signal
+        liftercoeff: liftering coefficient used to equalise scale of MFCCs
+
+    Returns:
+        N x nceps array with lifetered MFCC coefficients
+    """
+    frames = enframe(samples, winlen, winshift)
+    preemph = preemp(frames, preempcoeff)
+    windowed = windowing(preemph)
+    spec = powerSpectrum(windowed, nfft)
+    mspec = logMelSpectrum(spec, samplingrate)
+    ceps = cepstrum(mspec, nceps)
+    return lifter(ceps, liftercoeff)
+
+# Functions to be implemented ----------------------------------
 
 def enframe(samples, winlen, winshift):
     """
@@ -40,7 +69,6 @@ def preemp(input, p=0.97):
         output: array of pre-emphasised speech samples
     Note (you can use the function lfilter from scipy.signal)
     """
-    
     ans = []
     for i in range (len(input)):
         ans.append(lfilter([1,-p], [1], input[i], axis=-1, zi=None))
@@ -58,13 +86,11 @@ def windowing(input):
     Note (you can use the function hamming from scipy.signal, include the sym=0 option
     if you want to get the same results as in the example)
     """
-    
     ans = []
     window = hamming(len(input[0]), sym=0 )
     for i in range (len(input)):
         ans.append(np.multiply(input[i], window))
     return(ans)
-
 
 def powerSpectrum(input, nfft):
     """
@@ -90,7 +116,7 @@ def logMelSpectrum(input, samplingrate):
     Args:
         input: array of power spectrum coefficients [N x nfft] where N is the number of frames and
                nfft the length of each spectrum
-        samplingrate: sampling rate of the original signal (used to calculate the filterbanks)
+        samplingrate: sampling rate of the original signal (used to calculate the filterbank shapes)
     Output:
         array of Mel filterbank log outputs [N x nmelfilters] where nmelfilters is the number
         of filters in the filterbank
@@ -116,20 +142,38 @@ def cepstrum(input, nceps):
     """
     ans = []
     for i in range (len(input)):
-        ans.append(dct(input[i], type=2, n=None, axis=-1, norm=None, overwrite_x=False))
+        ans.append((dct(input[i], type=2, n=None, axis=-1, norm=None, overwrite_x=False))[:nceps])
     res= []
-    for i in range (len(ans)):
-        res.append(ans[i][:nceps])
-    return(res)
+    return(ans)
     
-    
-def dtw(localdist):
+
+def dtw(x, y, dist):
     """Dynamic Time Warping.
 
     Args:
-        localdist: array NxM of local distances computed between two sequences
-                   of length N and M respectively
+        x, y: arrays of size NxD and MxD respectively, where D is the dimensionality
+              and N, M are the respective lenghts of the sequences
+        dist: distance function (can be used in the code as dist(x[i], y[j]))
 
-    Output:
-        globaldist: scalar, global distance computed by Dynamic Time Warping
+    Outputs:
+        d: global distance between the sequences (scalar) normalized to len(x)+len(y)
+        LD: local distance between frames from x and y (NxM matrix)
+        AD: accumulated distance between frames of x and y (NxM matrix)
+        path: best path thtough AD
+
+    Note that you only need to define the first output for this exercise.
     """
+    LD = dist(x,y)
+    N = len(x)
+    M = len(y)
+    globaldist = np.zeros((N,M))
+    globaldist[0,:] = localdist[0,:]
+    globaldist[:,0] = localdist[:,0]
+    for n in range(1,N):
+        for m in range(1,M):
+            globaldist[n,m] = localdist[n,m]+ np.amin([globaldist[n-1,m],globaldist[n-1,m-1],globaldist[n,m-1]])
+    AD = globaldist
+    d = globaldist[N-1,M-1]/(N+M)
+    
+    return([d,LD,AD,path])
+
