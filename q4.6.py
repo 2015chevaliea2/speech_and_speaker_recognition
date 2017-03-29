@@ -48,15 +48,16 @@ def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate
 #         feature.append(mfcci[k])
 
 ##concatenate mspec in one feature
-# feature = []
-# for i in range (len(tidigits)):
-#     mspeci = mfcc(tidigits[i].get('samples'))[1]
-#     for k in range (len(mspeci)):
-#         feature.append(mspeci[k])
+feature = []
+for i in range (len(tidigits)):
+    mspeci = mfcc(tidigits[i].get('samples'))[1]
+    for k in range (len(mspeci)):
+        feature.append(mspeci[k])
 
 ##Correlation coefficient
 
-# correlation_matrix = np.corrcoef(np.array(feature))
+correlation_matrix = np.corrcoef(np.array(feature))
+pcolormesh(correlation_matrix)
 
 # def dist (a,b):
 #     n, m  = len(a), len(b)
@@ -71,14 +72,14 @@ def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate
 #c = distances(a,b)
 #imshow(c)
 
-L = len(tidigits)
-M = np.zeros((L,L))
-for i in range(L):
-    for j in range(L):
-        x = mfcc(tidigits[i].get('samples'))[0]
-        y = mfcc(tidigits[j].get('samples'))[0]
-        M[i,j] = dtw(x, y, dist)[0]
-imshow(M)
+# L = len(tidigits)
+# M = np.zeros((L,L))
+# for i in range(L):
+#     for j in range(L):
+#         x = mfcc(tidigits[i].get('samples'))[0]
+#         y = mfcc(tidigits[j].get('samples'))[0]
+#         M[i,j] = dtw(x, y, dist)[0]
+# imshow(M)
 
 # x = mfcc(tidigits[0].get('samples'))[0]
 # y = mfcc(tidigits[1].get('samples'))[0]

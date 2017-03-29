@@ -4,7 +4,7 @@ from scipy.signal import hamming
 from scipy.fftpack import fft
 from tools import trfbank
 from scipy.fftpack.realtransforms import dct
-from tools import dist
+from tools import *
 import numpy as np
 
 # Function given by the exercise ----------------------------------
@@ -31,7 +31,7 @@ def mfcc(samples, winlen = 400, winshift = 200, preempcoeff=0.97, nfft=512, ncep
     spec = powerSpectrum(windowed, nfft)
     mspec = logMelSpectrum(spec, samplingrate)
     ceps = cepstrum(mspec, nceps)
-    return lifter(ceps, liftercoeff)
+    return lifter(np.array(ceps), liftercoeff)
 
 # Functions to be implemented ----------------------------------
 
@@ -175,19 +175,35 @@ def dtw(x, y, dist):
     AD = globaldist
     d = globaldist[N-1,M-1]/(N+M)
     
-    abs = N-1
-    ord = M-1
+    # abs = N-1
+    # ord = M-1
+    # path = [[abs,ord]]
+    # while abs>0 or ord>0:
+    #     if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1] and abs>0 and ord >0:
+    #         path = path + [[abs-1,ord-1]]
+    #         abs = abs-1
+    #         ord = ord-1
+    #     elif AD[abs,ord-1]<=AD[abs-1,ord-1] and AD[abs,ord-1]<=AD[abs-1,ord] and ord >0:
+    #         path = path + [[abs,ord-1]]
+    #         ord = ord-1
+    #     elif abs>0:
+    #         path = path + [[abs-1,ord]]
+    #         abs = abs - 1
+    
+    abs = 0
+    ord = 0
     path = [[abs,ord]]
-    while abs>0 or ord>0:
-        if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1] and abs>0 and ord >0:
-            path = path + [[abs-1,ord-1]]
-            abs = abs-1
-            ord = ord-1
-        elif AD[abs,ord-1]<=AD[abs-1,ord-1] and AD[abs,ord-1]<=AD[abs-1,ord] and ord >0:
-            path = path + [[abs,ord-1]]
-            ord = ord-1
-        elif abs>0:
-            path = path + [[abs-1,ord]]
-            abs = abs - 1
+    # while abs<N-2 or ord<M-2:
+    #     if AD[abs+1,ord +1]<=AD[abs+1,ord] and AD[abs+1,ord+1]<=AD[abs,ord+1] and abs<N-2 and ord<M-2:
+    #         path = path + [[abs+1,ord+1]]
+    #         abs = abs+1
+    #         ord = ord+1
+    #     elif AD[abs,ord+1]<=AD[abs+1,ord+1] and AD[abs,ord+1]<=AD[abs+1,ord] and ord<M-2:
+    #         path = path + [[abs,ord+1]]
+    #         ord = ord+1
+    #     else:
+    #         path = path + [[abs+1,ord]]
+    #         abs = abs + 1
+
     return([d,LD,AD,path])
 
