@@ -167,13 +167,27 @@ def dtw(x, y, dist):
     N = len(x)
     M = len(y)
     globaldist = np.zeros((N,M))
-    globaldist[0,:] = localdist[0,:]
-    globaldist[:,0] = localdist[:,0]
+    globaldist[0,:] = LD[0,:]
+    globaldist[:,0] = LD[:,0]
     for n in range(1,N):
         for m in range(1,M):
-            globaldist[n,m] = localdist[n,m]+ np.amin([globaldist[n-1,m],globaldist[n-1,m-1],globaldist[n,m-1]])
+            globaldist[n,m] = LD[n,m]+ np.amin([globaldist[n-1,m],globaldist[n-1,m-1],globaldist[n,m-1]])
     AD = globaldist
     d = globaldist[N-1,M-1]/(N+M)
     
+    abs = N-1
+    ord = M-1
+    path = [[abs,ord]]
+    # while abs>0 or ord>0:
+    #     if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1]:
+    #         path = path + [[abs-1,ord-1]]
+    #         abs = abs-1
+    #         ord = ord-1
+    #     elif AD[abs,ord-1]<=AD[abs-1,ord-1] and AD[abs,ord-1]<=AD[abs-1,ord]:
+    #         path = path + [[abs,ord-1]]
+    #         ord = ord-1
+    #     else:
+    #         path = path + [[abs-1,ord]]
+    #         abs = abs - 1
     return([d,LD,AD,path])
 

@@ -1,7 +1,7 @@
 from tools import *
 from proto import *
 import numpy as np
-from matplotlib.pyplot import imshow
+from matplotlib.pyplot import *
 
 tidigits = np.load( 'tidigits_python3.npz' )[ 'tidigits' ]
 
@@ -32,10 +32,10 @@ def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate
 
 
 ##compute mfccs    
-mfccs = []
-for i in range (len(tidigits)):
-    mfcctd = mfcc(tidigits[i].get('samples'))
-    mfccs.append(mfcctd)
+# mfccs = []
+# for i in range (len(tidigits)):
+#     mfcctd = mfcc(tidigits[i].get('samples'))
+#     mfccs.append(mfcctd)
 
 #print (mfccs[0])   
 #imshow(mfccs[33], aspect='auto', interpolation='nearest', origin='lower')
@@ -58,24 +58,28 @@ for i in range (len(tidigits)):
 
 # correlation_matrix = np.corrcoef(np.array(feature))
 
-def dist (a,b):
-    n, m  = len(a), len(b)
-    mat = np.zeros((n,m))
-    for i in range(n):
-        for j in range(m):
-            mat[i,j] = np.linalg.norm(a[i]-b[j])
-    return(mat)
-    
-a = tidigits[0].get('samples')
-b = tidigits[1].get('samples')
+# def dist (a,b):
+#     n, m  = len(a), len(b)
+#     mat = np.zeros((n,m))
+#     for i in range(n):
+#         for j in range(m):
+#             mat[i,j] = np.linalg.norm(a[i]-b[j])
+#     return(mat)
+#     
+# a = tidigits[0].get('samples')
+# b = tidigits[1].get('samples')
 #c = distances(a,b)
 #imshow(c)
 
-D = len(tidigits)
-M = np.zeros((D,D))
-for i in range(D):
-    for j in range(D):
-        M[i,j] = dtw(dist(mfcc(tidigits[i].get('samples'))[0],mfcc(tidigits[j].get('samples'))[0]))
-
+L = len(tidigits)
+M = np.zeros((L,L))
+for i in range(L):
+    for j in range(L):
+        x = mfcc(tidigits[i].get('samples'))[0]
+        y = mfcc(tidigits[j].get('samples'))[0]
+        M[i,j] = dtw(x, y, dist)[0]
 imshow(M)
 
+# x = mfcc(tidigits[0].get('samples'))[0]
+# y = mfcc(tidigits[1].get('samples'))[0]
+# t = dtw(x, y, dist)
