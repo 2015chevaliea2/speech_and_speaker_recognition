@@ -178,16 +178,16 @@ def dtw(x, y, dist):
     abs = N-1
     ord = M-1
     path = [[abs,ord]]
-    # while abs>0 or ord>0:
-    #     if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1]:
-    #         path = path + [[abs-1,ord-1]]
-    #         abs = abs-1
-    #         ord = ord-1
-    #     elif AD[abs,ord-1]<=AD[abs-1,ord-1] and AD[abs,ord-1]<=AD[abs-1,ord]:
-    #         path = path + [[abs,ord-1]]
-    #         ord = ord-1
-    #     else:
-    #         path = path + [[abs-1,ord]]
-    #         abs = abs - 1
+    while abs>0 or ord>0:
+        if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1] and abs>0 and ord >0:
+            path = path + [[abs-1,ord-1]]
+            abs = abs-1
+            ord = ord-1
+        elif AD[abs,ord-1]<=AD[abs-1,ord-1] and AD[abs,ord-1]<=AD[abs-1,ord] and ord >0:
+            path = path + [[abs,ord-1]]
+            ord = ord-1
+        elif abs>0:
+            path = path + [[abs-1,ord]]
+            abs = abs - 1
     return([d,LD,AD,path])
 
