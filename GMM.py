@@ -5,23 +5,49 @@ from tools import dist
 from matplotlib.pyplot import *
 from scipy.cluster.hierarchy import dendrogram, linkage
 
-nb=16
+nb=32
 G = mixture.GMM(nb)
 
 tidigits = np.load( 'tidigits_python3.npz' )[ 'tidigits' ]
 
+
+
+## test set nd training set for utterances
+# train_utterance = []
+# test_utterance = []
+# digit = '7'
+# count = 0
+# for i in range(len(tidigits)):
+#     if tidigits[i].get('digit') == digit and count < 3:
+#         count = count +1
+#         utterancei=(mfcc(tidigits[i].get('samples')))
+#         for k in range (len(utterancei)):
+#             train_utterance.append(utterancei[k])
+#     elif tidigits[i].get('digit') == digit and count==3:
+#         utterancei=(mfcc(tidigits[i].get('samples')))
+#         for k in range (len(utterancei)):
+#             test_utterance.append(utterancei[k])
+
+# G.fit(train_utterance)
+# proba = G.predict(test_utterance)
+# print(proba)
+
+
+## No test set
 utterance = []
-digit = 'z'
+digit = '7'
 for i in range(len(tidigits)):
     if tidigits[i].get('digit') == digit:
         utterancei=(mfcc(tidigits[i].get('samples')))
         for k in range (len(utterancei)):
             utterance.append(utterancei[k])
 
-trained = G.fit(utterance)
+G.fit(utterance)
+
 # a = np.zeros((1,13))
-# #b=G.predict(a)
+# b= G.predict(a)
 # G.predict([[1,2,3,2,4,2,5,6,7,4,5,6,3]])
+
 
 M = np.zeros((nb,nb))
 M = dist(G.means_ , G.means_)
