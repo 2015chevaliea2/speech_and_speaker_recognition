@@ -79,10 +79,10 @@ def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate
 #         x = mfcc(tidigits[i].get('samples'))[0]
 #         y = mfcc(tidigits[j].get('samples'))[0]
 #         M[i,j] = dtw(x, y, dist)[0]
-# imshow(M)
+# pcolormesh(M)
 
-x = mfcc(tidigits[33].get('samples'))[0]
-y = mfcc(tidigits[22].get('samples'))[0]
+x = mfcc(tidigits[0].get('samples'))[0]
+y = mfcc(tidigits[0].get('samples'))[0]
 t = dtw(x, y, dist)
-show(np.transpose(t[2]))
+pcolormesh(np.transpose(t[2]))
 plot(np.transpose(t[3])[0],np.transpose(t[3])[1])
