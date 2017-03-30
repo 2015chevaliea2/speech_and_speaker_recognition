@@ -167,17 +167,36 @@ def dtw(x, y, dist):
     N = len(x)
     M = len(y)
     globaldist = np.zeros((N,M))
-    globaldist[0,:] = LD[0,:]
-    globaldist[:,0] = LD[:,0]
+    antecedents = np.zeros((N,M,2))
+    globaldist[0,0] = LD[0,0]
+    for i in range(1,M):
+        globaldist[0,i] = LD[0,i] + globaldist[0,i-1]
+        antecedents[0,i] = [0,i-1]
+    for i in range(1,N):
+        globaldist[i,0] = LD[i,0] + globaldist[i-1,0]
+        antecedents[i,0] = [i-1, 0]
     for n in range(1,N):
         for m in range(1,M):
-            globaldist[n,m] = LD[n,m]+ np.amin([globaldist[n-1,m],globaldist[n-1,m-1],globaldist[n,m-1]])
+            predecessors = [globaldist[n-1,m-1],globaldist[n,m-1],globaldist[n-1,m]]
+            minimum = np.amin(predecessors)
+            index = np.argmin(predecessors)
+            globaldist[n,m] = LD[n,m]+ minimum
+            if index == 0:
+                antecedents[n,m] = [n-1,m-1]
+            elif index == 1:
+                antecedents[n,m] = [n,m-1]
+            else :
+                antecedents[n,m] = [n-1,m]
     AD = globaldist
     d = globaldist[N-1,M-1]/(N+M)
     
-    # abs = N-1
-    # ord = M-1
-    # path = [[abs,ord]]
+    abs, ord = [N-1,M-1]
+    path = [[abs,ord]]
+    while abs>0 and ord>0 :
+        path.append(antecedents[abs,ord])
+        abs , ord = antecedents[abs, ord]
+    
+    
     # while abs>0 or ord>0:
     #     if AD[abs-1,ord -1]<=AD[abs-1,ord] and AD[abs-1,ord-1]<=AD[abs,ord-1] and abs>0 and ord >0:
     #         path = path + [[abs-1,ord-1]]
@@ -190,9 +209,9 @@ def dtw(x, y, dist):
     #         path = path + [[abs-1,ord]]
     #         abs = abs - 1
     
-    abs = 0
-    ord = 0
-    path = [[abs,ord]]
+    # abs = 0
+    # ord = 0
+    # path = [[abs,ord]]
     # while abs<N-2 or ord<M-2:
     #     if AD[abs+1,ord +1]<=AD[abs+1,ord] and AD[abs+1,ord+1]<=AD[abs,ord+1] and abs<N-2 and ord<M-2:
     #         path = path + [[abs+1,ord+1]]
