@@ -72,17 +72,17 @@ def mfcc(samples, winlen = 400, winshift = 200, nfft=512, nceps=13, samplingrate
 #c = distances(a,b)
 #imshow(c)
 
-# L = len(tidigits)
-# M = np.zeros((L,L))
-# for i in range(L):
-#     for j in range(L):
-#         x = mfcc(tidigits[i].get('samples'))[0]
-#         y = mfcc(tidigits[j].get('samples'))[0]
-#         M[i,j] = dtw(x, y, dist)[0]
-# pcolormesh(M)
+L = len(tidigits)
+M = np.zeros((L,L))
+for i in range(L):
+    for j in range(L):
+        x = mfcc(tidigits[i].get('samples'))[0]
+        y = mfcc(tidigits[j].get('samples'))[0]
+        M[i,j] = dtw(x, y, dist)[0]
+pcolormesh(M)
 
-x = mfcc(tidigits[0].get('samples'))[0]
-y = mfcc(tidigits[0].get('samples'))[0]
-t = dtw(x, y, dist)
-pcolormesh(np.transpose(t[2]))
-plot(np.transpose(t[3])[0],np.transpose(t[3])[1])
+# x = mfcc(tidigits[42].get('samples'))[0]
+# y = mfcc(tidigits[43].get('samples'))[0]
+# t = dtw(x, y, dist)
+# pcolormesh(np.transpose(t[2]))
+# plot(np.transpose(t[3])[0],np.transpose(t[3])[1])

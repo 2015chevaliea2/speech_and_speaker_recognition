@@ -31,6 +31,6 @@ print(example.get('mspec')-np.array(mspecexp)<=0.00001)
 
 mfccexp = cepstrum(mspecexp, 13)
 print(example.get('mfcc')-np.array(mfccexp)<=0.000001)
-imshow(mfccexp, aspect='auto', interpolation='nearest', origin='lower')
+imshow(lifter(np.array(mfccexp), 22), aspect='auto', interpolation='nearest', origin='lower')
 #imshow(example.get('mfcc'), aspect='auto', interpolation='nearest', origin='lower')
 

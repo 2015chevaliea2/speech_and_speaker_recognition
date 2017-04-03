@@ -142,7 +142,7 @@ def cepstrum(input, nceps):
     """
     ans = []
     for i in range (len(input)):
-        ans.append((dct(input[i], type=2, n=None, axis=-1, norm=None, overwrite_x=False))[:nceps])
+        ans.append((dct(input[i], type=2, n=None, axis=-1, norm='ortho', overwrite_x=False))[:nceps])
     res= []
     return(ans)
     

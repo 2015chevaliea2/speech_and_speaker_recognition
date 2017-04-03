@@ -34,23 +34,25 @@ tidigits = np.load( 'tidigits_python3.npz' )[ 'tidigits' ]
 
 
 ## No test set
-utterance = []
-digit = '7'
-for i in range(len(tidigits)):
-    if tidigits[i].get('digit') == digit:
-        utterancei=(mfcc(tidigits[i].get('samples')))
-        for k in range (len(utterancei)):
-            utterance.append(utterancei[k])
+# utterance = []
+# digit = '7'
+# for i in range(len(tidigits)):
+#     if tidigits[i].get('digit') == digit:
+#         utterancei=(mfcc(tidigits[i].get('samples')))
+#         for k in range (len(utterancei)):
+#             utterance.append(utterancei[k])
 
-G.fit(utterance)
+G.fit(mfcc(tidigits[16].get('samples')))
+plot(G.means_)
 
 # a = np.zeros((1,13))
 # b= G.predict(a)
 # G.predict([[1,2,3,2,4,2,5,6,7,4,5,6,3]])
 
 
-M = np.zeros((nb,nb))
-M = dist(G.means_ , G.means_)
+# M = np.zeros((nb,nb))
+# M = dist(G.means_ , G.means_)
+
 # for i in range(nb):
 #     for j in range(nb):
 #         x = np.array(G.means_[i,:])
@@ -59,6 +61,6 @@ M = dist(G.means_ , G.means_)
         
 #pcolormesh(M)
 
-link = linkage(M, method='complete')
-dendro = dendrogram(link, orientation='left')
-show(dendro)
+# link = linkage(M, method='complete')
+# dendro = dendrogram(link, orientation='left')
+# show(dendro)
