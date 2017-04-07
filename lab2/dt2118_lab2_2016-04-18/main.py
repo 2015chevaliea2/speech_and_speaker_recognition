@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.mixture import log_multivariate_normal_density
 from matplotlib.pyplot import pcolormesh
-from proto2 import gmmloglik, forward
+from proto2 import gmmloglik, forward, hmmloglik
 
 tidigits = np.load('lab2_tidigits.npz', encoding='bytes')['tidigits']
 models = np.load('lab2_models.npz' , encoding='bytes')['models' ]
@@ -38,7 +38,8 @@ example = np.load( 'lab2_example.npz', encoding = 'bytes' )[ 'example' ].item()
 #print(example_gmmloglik)
 #print(exp_gmmloglik)
 
-def compute_scores():
+#sore the utterances
+def compute_scores_gmm():
     scores = np.zeros((44,11))
     for i in range (44):
         for j in range (11):
@@ -50,15 +51,16 @@ def compute_scores():
             scores[i,j] = gmmloglik(lpr_gmm, weights)
     return (scores)
 
-#scores = compute_scores
-#print (compute_scores)
-#winner_digit = np.argmax(scores, 1)
-#print (winner_digit) #all the digits are well recognized
+#scores_gmm = compute_scores_gmm()
+#print (scores_gmm)
+#winner_digit_gmm = np.argmax(scores_gmm, 1)
+#print (winner_digit_gmm) #all the digits are well recognized
 
 #==============================================================================
-# question 6
+# question 6 
 #==============================================================================
 
+#the code is OK there is just a problemn comparing -inf and -inf
 X = example[b'mfcc']
 mu = models[0][b'hmm'].get(b'means')
 cv = models[0][b'hmm'].get(b'covars')
@@ -67,8 +69,55 @@ log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
 log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
 
 fwd = forward(log_emlik, log_startprob, log_transmat)
+#example_logalpha = example[ b'hmm_logalpha' ]
+#pcolormesh (abs(fwd-example_logalpha).T<0.0001)
+#print(example_logalpha)
+#print(fwd)
+#pcolormesh(example_logalpha)
 
-pcolormesh(fwd.T)
+#to plot the latice alpha
+pcolormesh(np.exp(fwd))
 
+#the two hmm_loglik are equals
+#exp_hmmloglik = hmmloglik(fwd)
+#print (example[ b'hmm_loglik' ])
+#print (exp_hmmloglik)
 
+#compute all hmm_scores
+
+def compute_scores_hmm():
+    scores = np.zeros((44,11))
+    for i in range (44):
+        for j in range (11):
+            X = tidigits[i].get(b'mfcc')
+            mu = models[j][b'hmm'].get(b'means')
+            cv = models[j][b'hmm'].get(b'covars')
+            log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
+            log_startprob = np.log(models[j][b'hmm'].get(b'startprob'))
+            log_transmat =  np.log(models[j][b'hmm'].get(b'transmat'))
+            fwd = forward(log_emlik, log_startprob, log_transmat)
+            scores[i,j] = hmmloglik(fwd)
+    return (scores)
+
+#scores_hmm = compute_scores_hmm()
+#print (scores_hmm)
+#winner_digit_hmm = np.argmax(scores_hmm, 1)
+#print (winner_digit_hmm) #some digits are miss classified
+            
+def compute_scores_hmm2gmm():
+    scores = np.zeros((44,11))
+    for i in range (44):
+        for j in range (11):
+            X = tidigits[i].get(b'mfcc')
+            mu = models[j][b'hmm'].get(b'means')
+            cv = models[j][b'hmm'].get(b'covars')
+            weights = [1/len(mu)]*len(mu)
+            lpr_hmm = log_multivariate_normal_density(X,mu,cv,'diag')
+            scores[i,j] = gmmloglik(lpr_hmm, weights)
+    return(scores)
+
+#scores_hmm2gmm = compute_scores_hmm2gmm()
+#print (scores_hmm2gmm)
+#winner_digit_hmm2gmm = np.argmax(scores_hmm2gmm, 1)
+#print (winner_digit_hmm2gmm) #all th digits are well recognized
 

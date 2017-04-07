@@ -20,6 +20,9 @@ def gmmloglik(log_emlik, weights):
         ans = ans + logsumexp(arr, axis=0)
     return (ans)
     
+def hmmloglik(logalpha):
+    N = len(logalpha)
+    return(logsumexp(logalpha[N-1,:]))
 
 def forward(log_emlik, log_startprob, log_transmat):
     """Forward probabilities in log domain.
@@ -39,7 +42,7 @@ def forward(log_emlik, log_startprob, log_transmat):
         fwd_prob[0,m] = np.add(log_startprob[m],  log_emlik[0,m])
     for n in range (1,N):
         for m in range(M):
-            arr = np.add(fwd_prob[n-1,:], log_transmat[:,m])
+            arr = np.add(fwd_prob[n-1,:], log_transmat[:,m].T)
             lse = logsumexp(arr, axis=0)
             fwd_prob[n,m] = np.add(lse, log_emlik[n,m])
     return (fwd_prob)
