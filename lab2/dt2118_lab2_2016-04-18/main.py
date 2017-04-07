@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.mixture import log_multivariate_normal_density
 from matplotlib.pyplot import pcolormesh
-from proto2 import gmmloglik, forward, hmmloglik
+from proto2 import gmmloglik, forward, hmmloglik, viterbi
 
 tidigits = np.load('lab2_tidigits.npz', encoding='bytes')['tidigits']
 models = np.load('lab2_models.npz' , encoding='bytes')['models' ]
@@ -61,14 +61,14 @@ def compute_scores_gmm():
 #==============================================================================
 
 #the code is OK there is just a problemn comparing -inf and -inf
-X = example[b'mfcc']
-mu = models[0][b'hmm'].get(b'means')
-cv = models[0][b'hmm'].get(b'covars')
-log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
-log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
-log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
+#X = example[b'mfcc']
+#mu = models[0][b'hmm'].get(b'means')
+#cv = models[0][b'hmm'].get(b'covars')
+#log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
+#log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
+#log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
 
-fwd = forward(log_emlik, log_startprob, log_transmat)
+#fwd = forward(log_emlik, log_startprob, log_transmat)
 #example_logalpha = example[ b'hmm_logalpha' ]
 #pcolormesh (abs(fwd-example_logalpha).T<0.0001)
 #print(example_logalpha)
@@ -76,7 +76,8 @@ fwd = forward(log_emlik, log_startprob, log_transmat)
 #pcolormesh(example_logalpha)
 
 #to plot the latice alpha
-pcolormesh(np.exp(fwd))
+#there is a problem plotting
+#pcolormesh(np.exp(fwd))
 
 #the two hmm_loglik are equals
 #exp_hmmloglik = hmmloglik(fwd)
@@ -121,3 +122,8 @@ def compute_scores_hmm2gmm():
 #winner_digit_hmm2gmm = np.argmax(scores_hmm2gmm, 1)
 #print (winner_digit_hmm2gmm) #all th digits are well recognized
 
+#==============================================================================
+# Question 7 have to test viterbi
+#==============================================================================
+
+....
