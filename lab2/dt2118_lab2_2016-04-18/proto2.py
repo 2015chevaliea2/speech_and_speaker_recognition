@@ -83,15 +83,11 @@ def viterbi(log_emlik, log_startprob, log_transmat):
             lse = np.amax(arr)
             antecedents[n,m] = np.argmax(arr)
             viterbi[n,m] = np.add(lse, log_emlik[n,m])
-    path = [[N-1,M-1]]
     u = N-1
     v = M-1
-    while u>0 and v>0:
-        if antecedents[u, v] < v:
-            path = path +[[u-1,antecedents[u,v]]]
-            u=u-1
-            v=v-1
-        else :
-            path = path +[[u-1,antecedents[u,v]]]
-            u=u-1
-    return (viterbi, path)
+    path = [v]
+    while u>0 :
+        u=u-1
+        v=antecedents[u, v]
+        path = path +[v]
+    return ([viterbi, np.array(path)])

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.mixture import log_multivariate_normal_density
-from matplotlib.pyplot import pcolormesh
+from matplotlib.pyplot import pcolormesh, imshow, plot
 from proto2 import gmmloglik, forward, hmmloglik, viterbi
 
 tidigits = np.load('lab2_tidigits.npz', encoding='bytes')['tidigits']
@@ -67,17 +67,18 @@ def compute_scores_gmm():
 #log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
 #log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
 #log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
-
+#
 #fwd = forward(log_emlik, log_startprob, log_transmat)
 #example_logalpha = example[ b'hmm_logalpha' ]
 #pcolormesh (abs(fwd-example_logalpha).T<0.0001)
 #print(example_logalpha)
 #print(fwd)
-#pcolormesh(example_logalpha)
+#imshow(example_logalpha.T ,origin= 'lower' ,interpolation= 'nearest' ,aspect= 'auto')
 
 #to plot the latice alpha
 #there is a problem plotting
-#pcolormesh(np.exp(fwd))
+#imshow(np.exp(fwd).T ,origin= 'lower' ,interpolation= 'nearest' ,aspect= 'auto')
+
 
 #the two hmm_loglik are equals
 #exp_hmmloglik = hmmloglik(fwd)
@@ -123,7 +124,44 @@ def compute_scores_hmm2gmm():
 #print (winner_digit_hmm2gmm) #all th digits are well recognized
 
 #==============================================================================
-# Question 7 have to test viterbi
+# Question 7 Viterbi is OK
 #==============================================================================
 
-....
+#X = example[b'mfcc']
+#mu = models[0][b'hmm'].get(b'means')
+#cv = models[0][b'hmm'].get(b'covars')
+#log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
+#log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
+#log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
+#
+#expv = viterbi(log_emlik, log_startprob, log_transmat)
+#example_vloglik= example[b'hmm_vloglik']
+#imshow(expv[0].T ,origin= 'lower' ,interpolation= 'nearest' ,aspect= 'auto')
+#plot(np.flipud(expv[1]))
+#
+##compute viterbi loglik and check equality with example
+#exp_vloglik = hmmloglik(expv[0])
+#print (exp_vloglik, np.flipud(expv[1]))
+#print (example_vloglik)
+#print (np.flipud(expv[1]))
+#print (abs(exp_vloglik-example_vloglik[0])<0.00001)
+#print (abs(np.flipud(expv[1]) - example_vloglik[1])<0.00001)
+
+def compute_scores_viterbi():
+    scores = np.zeros((44,11))
+    for i in range (44):
+        for j in range (11):
+            X = tidigits[i].get(b'mfcc')
+            mu = models[j][b'hmm'].get(b'means')
+            cv = models[j][b'hmm'].get(b'covars')
+            log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
+            log_startprob = np.log(models[j][b'hmm'].get(b'startprob'))
+            log_transmat =  np.log(models[j][b'hmm'].get(b'transmat'))
+            vit = viterbi(log_emlik, log_startprob, log_transmat)
+            scores[i,j] = hmmloglik(vit[0])
+    return(scores)
+
+scores_viterbi = compute_scores_viterbi()
+print (scores_viterbi)
+winner_digit_viterbi = np.argmax(scores_viterbi, 1)
+print (winner_digit_viterbi) #all th digits are well recognized
