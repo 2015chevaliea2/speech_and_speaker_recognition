@@ -50,7 +50,7 @@ def compute_scores_gmm():
             lpr_gmm = log_multivariate_normal_density(X,mu,cv,'diag')
             scores[i,j] = gmmloglik(lpr_gmm, weights)
     return (scores)
-
+#
 #scores_gmm = compute_scores_gmm()
 #print (scores_gmm)
 #winner_digit_gmm = np.argmax(scores_gmm, 1)
@@ -127,19 +127,19 @@ def compute_scores_hmm2gmm():
 # Question 7 Viterbi is OK
 #==============================================================================
 
-#X = example[b'mfcc']
-#mu = models[0][b'hmm'].get(b'means')
-#cv = models[0][b'hmm'].get(b'covars')
+#X = tidigits[16][b'mfcc']
+#mu = models[8][b'hmm'].get(b'means')
+#cv = models[8][b'hmm'].get(b'covars')
 #log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
-#log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
-#log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
+#log_startprob = np.log(models[8][b'hmm'].get(b'startprob'))
+#log_transmat =  np.log(models[8][b'hmm'].get(b'transmat'))
 #
 #expv = viterbi(log_emlik, log_startprob, log_transmat)
 #example_vloglik= example[b'hmm_vloglik']
 #imshow(expv[0].T ,origin= 'lower' ,interpolation= 'nearest' ,aspect= 'auto')
 #plot(np.flipud(expv[1]))
-#
-##compute viterbi loglik and check equality with example
+
+#compute viterbi loglik and check equality with example
 #exp_vloglik = hmmloglik(expv[0])
 #print (exp_vloglik, np.flipud(expv[1]))
 #print (example_vloglik)
@@ -161,7 +161,7 @@ def compute_scores_viterbi():
             scores[i,j] = hmmloglik(vit[0])
     return(scores)
 
-scores_viterbi = compute_scores_viterbi()
-print (scores_viterbi)
-winner_digit_viterbi = np.argmax(scores_viterbi, 1)
-print (winner_digit_viterbi) #all th digits are well recognized
+#scores_viterbi = compute_scores_viterbi()
+#print (scores_viterbi)
+#winner_digit_viterbi = np.argmax(scores_viterbi, 1)
+#print (winner_digit_viterbi) #some utterances are missclssified we count 2 mistakes

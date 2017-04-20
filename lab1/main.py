@@ -1,8 +1,19 @@
 import numpy as np
 from proto import *
 from matplotlib.pyplot import *
+from scipy.io.wavfile import write
+#import scikits.audiolab
 
 example = np.load( 'example_python3.npz' )[ 'example' ].item()
+
+sample = example.get('samples')
+# write array to file:
+#scikits.audiolab.wavwrite(sample, 'test.wav', len(sample), enc='pcm16')
+## play the array:
+#scikits.audiolab.play(sample, len(sample))
+
+write('sample.wav', len(sample)+1, sample)
+
 
 expframes = enframe(example.get('samples'),400,200)
 print(example.get('frames')==np.array(expframes))
@@ -31,6 +42,7 @@ print(example.get('mspec')-np.array(mspecexp)<=0.00001)
 
 mfccexp = cepstrum(mspecexp, 13)
 print(example.get('mfcc')-np.array(mfccexp)<=0.000001)
-imshow(lifter(np.array(mfccexp), 22), aspect='auto', interpolation='nearest', origin='lower')
+#imshow(lifter(np.array(mfccexp), 22), aspect='auto', interpolation='nearest', origin='lower')
 #imshow(example.get('mfcc'), aspect='auto', interpolation='nearest', origin='lower')
+
 
