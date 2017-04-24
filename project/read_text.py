@@ -66,14 +66,24 @@ def list_of_words(splitted_text):
     
 def language_dictionary(splitted_text):
     dictionary = Counter({})
-    for i in range(len(splitted_text)):
+    for i in range(100):
         dictionary = dictionary + Counter(splitted_text[i])
     return(dictionary)
+    
+def SOS_EOS(splitted_text):
+    with_SOS_EOS = splitted_text
+    for i in range(len(splitted_text)):
+        with_SOS_EOS[i] = ['SOS'] + with_SOS_EOS[i] + ['EOS']
+    return(with_SOS_EOS)
+
+def bigrams(splitted_text,dictionary):
+    N = len(dictionary)
 
 #pairs = readLangs('ang', 'fra', reverse=False)[2]
 #s = split_sentence(pairs[])
-splitted = split_txt()    
-dictionary = language_dictionary(splitted)
+splitted = split_txt()  
+splitted2 = SOS_EOS(splitted)  
+dictionary = language_dictionary(splitted2)
 #distinct_words = list_of_words(splitted)[0]
 #probabilities = list_of_words(splitted)[1]
     
