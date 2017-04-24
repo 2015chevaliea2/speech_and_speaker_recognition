@@ -4,7 +4,8 @@ import re
 import random
 from class_lang import Lang
 import numpy as np
-from collections import Counter
+from collections import Counter, OrderedDict
+import anytree
 
 # Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -52,23 +53,23 @@ def split_txt():
     return(ans)
 
 #This function returns the list of distinct words as 1st argument, and the list of words with repetition as 2nd argument   
-def list_of_words(splitted_text):
-    words = []
-    for i in range(len(splitted_text)):
-        for j in range(len(splitted_text[i])):
-            words.append(splitted_text[i][j])
-    distinct_words = list(set(words))
-    N = len(distinct_words)
-    probabilities = np.zeros(N)
-    for i in range(N):
-        probabilities[i] = words.count(distinct_words[i])/len(words)
-    return(distinct_words,probabilities)
-    
+#def list_of_words(splitted_text):
+#    words = []
+#    for i in range(len(splitted_text)):
+#        for j in range(len(splitted_text[i])):
+#            words.append(splitted_text[i][j])
+#    distinct_words = list(set(words))
+#    N = len(distinct_words)
+#    probabilities = np.zeros(N)
+#    for i in range(N):
+#        probabilities[i] = words.count(distinct_words[i])/len(words)
+#    return(distinct_words,probabilities)
+length = 100    
 def language_dictionary(splitted_text):
     dictionary = Counter({})
-    for i in range(100):
+    for i in range(length):
         dictionary = dictionary + Counter(splitted_text[i])
-    return(dictionary)
+    return(dictionary,list(dictionary.keys()))
     
 def SOS_EOS(splitted_text):
     with_SOS_EOS = splitted_text
@@ -76,16 +77,31 @@ def SOS_EOS(splitted_text):
         with_SOS_EOS[i] = ['SOS'] + with_SOS_EOS[i] + ['EOS']
     return(with_SOS_EOS)
 
-def bigrams(splitted_text,dictionary):
+def bigrams(splitted_text,L):
     N = len(dictionary)
+    transition_mat = np.zeros((N,N))
+    for i in range(length):
+        sentence = splitted_text[i]
+        for j in range(1,len(sentence)):
+            previous_word = sentence[j-1]        
+            current_word = sentence[j]
+            line = L.index(previous_word)
+            column = L.index(current_word)
+            transition_mat[line,column] += 1 
+    for i in range(N):
+        transition_mat[i,:] = transition_mat[i,:]/np.sum(transition_mat[i,:])
+    return(transition_mat)
+                    
+    
 
 #pairs = readLangs('ang', 'fra', reverse=False)[2]
 #s = split_sentence(pairs[])
 splitted = split_txt()  
 splitted2 = SOS_EOS(splitted)  
-dictionary = language_dictionary(splitted2)
-#distinct_words = list_of_words(splitted)[0]
-#probabilities = list_of_words(splitted)[1]
+dictionary = language_dictionary(splitted2)[0]
+L = language_dictionary(splitted2)[1]
+M = bigrams(splitted2,L)
+
     
     
             
