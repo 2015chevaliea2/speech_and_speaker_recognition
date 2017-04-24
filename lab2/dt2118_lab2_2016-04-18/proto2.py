@@ -1,5 +1,5 @@
 import numpy as np
-from tools2 import logsumexp
+from tools2 import logsumexp,log_multivariate_normal_density_diag
 
 def gmmloglik(log_emlik, weights):
     """Log Likelihood for a GMM model based on Multivariate Normal Distribution.
@@ -58,6 +58,16 @@ def backward(log_emlik, log_startprob, log_transmat):
     Output:
         backward_prob: NxM array of backward log probabilities for each of the M states in the model
     """
+    N = len(log_emlik)
+    M = len(log_emlik[0])
+    bwd_prob = np.zeros((N,M))
+    for n in range(N-2,-1,-1):
+        for m in range(M):
+            arr = np.add(log_transmat[m,:],bwd_prob[n+1,:])
+            arr = np.add(arr,log_emlik[n+1,:])
+            lse = logsumexp(arr,axis = 0)
+            bwd_prob[n,m] = lse
+    return(bwd_prob)
 
 def viterbi(log_emlik, log_startprob, log_transmat):
     """Viterbi path.

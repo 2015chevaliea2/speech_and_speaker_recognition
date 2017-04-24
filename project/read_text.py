@@ -3,6 +3,8 @@ import string
 import re
 import random
 from class_lang import Lang
+import numpy as np
+from collections import Counter
 
 # Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -49,9 +51,36 @@ def split_txt():
         ans.append(split)
     return(ans)
 
+#This function returns the list of distinct words as 1st argument, and the list of words with repetition as 2nd argument   
+def list_of_words(splitted_text):
+    words = []
+    for i in range(len(splitted_text)):
+        for j in range(len(splitted_text[i])):
+            words.append(splitted_text[i][j])
+    distinct_words = list(set(words))
+    N = len(distinct_words)
+    probabilities = np.zeros(N)
+    for i in range(N):
+        probabilities[i] = words.count(distinct_words[i])/len(words)
+    return(distinct_words,probabilities)
+    
+def language_dictionary(splitted_text):
+    dictionary = Counter({})
+    for i in range(len(splitted_text)):
+        dictionary = dictionary + Counter(splitted_text[i])
+    return(dictionary)
+
 #pairs = readLangs('ang', 'fra', reverse=False)[2]
 #s = split_sentence(pairs[])
-#splitted = split_txt()
+splitted = split_txt()    
+dictionary = language_dictionary(splitted)
+#distinct_words = list_of_words(splitted)[0]
+#probabilities = list_of_words(splitted)[1]
+    
+    
+            
+        
+
 
 
 

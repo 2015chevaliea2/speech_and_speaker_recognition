@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.mixture import log_multivariate_normal_density
 from matplotlib.pyplot import pcolormesh, imshow, plot
-from proto2 import gmmloglik, forward, hmmloglik, viterbi
+from proto2 import gmmloglik, forward, hmmloglik, viterbi,backward
 
 tidigits = np.load('lab2_tidigits.npz', encoding='bytes')['tidigits']
 models = np.load('lab2_models.npz' , encoding='bytes')['models' ]
@@ -113,15 +113,15 @@ def compute_scores_hmm2gmm():
             X = tidigits[i].get(b'mfcc')
             mu = models[j][b'hmm'].get(b'means')
             cv = models[j][b'hmm'].get(b'covars')
-            weights = [1/len(mu)]*len(mu)
+            weights = 1/len(mu)*np.ones(len(mu))
             lpr_hmm = log_multivariate_normal_density(X,mu,cv,'diag')
             scores[i,j] = gmmloglik(lpr_hmm, weights)
     return(scores)
 
-#scores_hmm2gmm = compute_scores_hmm2gmm()
-#print (scores_hmm2gmm)
-#winner_digit_hmm2gmm = np.argmax(scores_hmm2gmm, 1)
-#print (winner_digit_hmm2gmm) #all th digits are well recognized
+scores_hmm2gmm = compute_scores_hmm2gmm()
+print (scores_hmm2gmm)
+winner_digit_hmm2gmm = np.argmax(scores_hmm2gmm, 1)
+print (winner_digit_hmm2gmm) #all th digits are well recognized
 
 #==============================================================================
 # Question 7 Viterbi is OK
@@ -165,3 +165,18 @@ def compute_scores_viterbi():
 #print (scores_viterbi)
 #winner_digit_viterbi = np.argmax(scores_viterbi, 1)
 #print (winner_digit_viterbi) #some utterances are missclssified we count 2 mistakes
+
+#==============================================================================
+# Optional : backward
+#==============================================================================
+#X = example[b'mfcc']
+#mu = models[0][b'hmm'].get(b'means')
+#cv = models[0][b'hmm'].get(b'covars')
+#log_emlik = log_multivariate_normal_density(X,mu,cv,'diag')
+#log_startprob = np.log(models[0][b'hmm'].get(b'startprob'))
+#log_transmat =  np.log(models[0][b'hmm'].get(b'transmat'))
+#bwd = backward(log_emlik, log_startprob, log_transmat)
+#example_logbeta = example[ b'hmm_logbeta' ]
+#pcolormesh (abs(bwd-example_logbeta).T<0.0001)
+
+#We obtain the same results as the example
