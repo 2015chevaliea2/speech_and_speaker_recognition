@@ -64,17 +64,17 @@ def split_txt():
 #    for i in range(N):
 #        probabilities[i] = words.count(distinct_words[i])/len(words)
 #    return(distinct_words,probabilities)
-length = 100    
+length = 100
 def language_dictionary(splitted_text):
     dictionary = Counter({})
     for i in range(length):
         dictionary = dictionary + Counter(splitted_text[i])
     return(dictionary,list(dictionary.keys()))
     
-def SOS_EOS(splitted_text):
-    with_SOS_EOS = splitted_text
+def SOS_EOS(splitted_text,n):
+    with_SOS_EOS = list(splitted_text)
     for i in range(len(splitted_text)):
-        with_SOS_EOS[i] = ['SOS'] + with_SOS_EOS[i] + ['EOS']
+        with_SOS_EOS[i] = ['SOS']*n + with_SOS_EOS[i] + ['EOS']*n
     return(with_SOS_EOS)
 
 def bigrams(splitted_text,L):
@@ -91,16 +91,96 @@ def bigrams(splitted_text,L):
     for i in range(N):
         transition_mat[i,:] = transition_mat[i,:]/np.sum(transition_mat[i,:])
     return(transition_mat)
-                    
+
+#    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
+def bigrams_list(splitted_text):
+    CURRENT = []
+    NEXT = []
+    NEXT_PROBAS = []
+    for i in range(length):
+        sentence = splitted_text[i]
+        for j in range(0,len(sentence)-1):
+            current_word = sentence[j]
+            next_word = sentence[j+1]
+            if current_word in CURRENT:
+                idx = CURRENT.index(current_word)
+                if next_word in NEXT[idx]:
+                    idx_next = NEXT[idx].index(next_word)
+                    NEXT_PROBAS[idx][idx_next] = NEXT_PROBAS[idx][idx_next]+1
+                else:
+                    NEXT[idx].append(next_word)
+                    NEXT_PROBAS[idx].append(1)
+            else:
+                CURRENT.append(current_word)
+                NEXT.append([next_word])
+                NEXT_PROBAS.append([1])
+    return(CURRENT,NEXT,NEXT_PROBAS)
+
+#    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
+def trigrams_list(splitted_text):
+    CURRENT = []
+    NEXT = []
+    NEXT_PROBAS = []
+    for i in range(length):
+        sentence = splitted_text[i]
+        for j in range(0,len(sentence)-2):
+            current_word = sentence[j]+" "+sentence[j+1]
+            next_word = sentence[j+2]
+            if current_word in CURRENT:
+                idx = CURRENT.index(current_word)
+                if next_word in NEXT[idx]:
+                    idx_next = NEXT[idx].index(next_word)
+                    NEXT_PROBAS[idx][idx_next] = NEXT_PROBAS[idx][idx_next]+1
+                else:
+                    NEXT[idx].append(next_word)
+                    NEXT_PROBAS[idx].append(1)
+            else:
+                CURRENT.append(current_word)
+                NEXT.append([next_word])
+                NEXT_PROBAS.append([1])
+    return(CURRENT,NEXT,NEXT_PROBAS)    
+
+def group_words(L):
+    out = L[0]
+    for i in range(1,len(L)):
+        out = out + " " + L[i]
+    return(out)
+    
+#This function returns :
+#the list of combinations of n-1 successive words in CURRENT
+#for each combination of n-1 words of CURRENT, the list of possible next word in NEXT (making a n-gram)
+#the associated probabilities in NEXT_PROBAS
+def ngrams_list(splitted_text,n):
+    new_text = SOS_EOS(splitted_text,n)
+    CURRENT = []
+    NEXT = []
+    NEXT_PROBAS = []
+    for i in range(length):
+        sentence = new_text[i]
+        for j in range(0,len(sentence)-(n-1)):
+            current_word = group_words(sentence[j:j+n-1])
+            next_word = sentence[j+n-1]
+            if current_word in CURRENT:
+                idx = CURRENT.index(current_word)
+                if next_word in NEXT[idx]:
+                    idx_next = NEXT[idx].index(next_word)
+                    NEXT_PROBAS[idx][idx_next] = NEXT_PROBAS[idx][idx_next]+1
+                else:
+                    NEXT[idx].append(next_word)
+                    NEXT_PROBAS[idx].append(1)
+            else:
+                CURRENT.append(current_word)
+                NEXT.append([next_word])
+                NEXT_PROBAS.append([1])
+    return(CURRENT,NEXT,NEXT_PROBAS)    
+
+splitted = split_txt()                      
+c,n,n_p = ngrams_list(splitted,4)
     
 
-#pairs = readLangs('ang', 'fra', reverse=False)[2]
-#s = split_sentence(pairs[])
-splitted = split_txt()  
-splitted2 = SOS_EOS(splitted)  
-dictionary = language_dictionary(splitted2)[0]
-L = language_dictionary(splitted2)[1]
-M = bigrams(splitted2,L)
+#dictionary = language_dictionary(splitted2)[0]
+#L = language_dictionary(splitted2)[1]
+#M = bigrams(splitted2,L)
 
     
     
