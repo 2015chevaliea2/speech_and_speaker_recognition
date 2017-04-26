@@ -6,7 +6,6 @@ from class_lang import Lang
 import numpy as np
 from collections import Counter, OrderedDict
 import copy
-length = 100
 
 # Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -53,7 +52,7 @@ def split_txt():
         ans.append(split)
     return(ans)
     
-def language_dictionary(splitted_text):
+def language_dictionary(splitted_text,length):
     dictionary = Counter({})
     for i in range(length):
         dictionary = dictionary + Counter(splitted_text[i])
@@ -81,7 +80,7 @@ def bigrams(splitted_text,L):
     return(transition_mat)
 
 #    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
-def bigrams_list(splitted_text):
+def bigrams_list(splitted_text,length):
     CURRENT = []
     NEXT = []
     NEXT_PROBAS = []
@@ -105,7 +104,7 @@ def bigrams_list(splitted_text):
     return(CURRENT,NEXT,NEXT_PROBAS)
 
 #    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
-def trigrams_list(splitted_text):
+def trigrams_list(splitted_text,length):
     CURRENT = []
     NEXT = []
     NEXT_PROBAS = []
@@ -138,7 +137,7 @@ def group_words(L):
 #the list of combinations of n-1 successive words in CURRENT
 #for each combination of n-1 words of CURRENT, the list of possible next word in NEXT (making a n-gram)
 #the associated probabilities in NEXT_PROBAS
-def ngrams_list(splitted_text,n):
+def ngrams_list(splitted_text,n,length):
     new_text = SOS_EOS(splitted_text,n)
     CURRENT = []
     NEXT = []
@@ -176,5 +175,5 @@ def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smo
                 NEXT_PROBAS_LAP[c].append(smoothing_factor)
     return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
     
-def back_off(input_string):
+#def back_off(input_string):
     
