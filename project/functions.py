@@ -61,7 +61,7 @@ def language_dictionary(splitted_text,length):
 def SOS_EOS(splitted_text,n):
     with_SOS_EOS = list(splitted_text)
     for i in range(len(splitted_text)):
-        with_SOS_EOS[i] = ['SOS']*n + with_SOS_EOS[i] + ['EOS']*n
+        with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] + ['EOS']*(n-1)
     return(with_SOS_EOS)
 
 def bigrams(splitted_text,L):
@@ -175,5 +175,27 @@ def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smo
                 NEXT_PROBAS_LAP[c].append(smoothing_factor)
     return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
     
-#def back_off(input_string):
+def freq2proba(NEXT_PROBAS):
+    OUTPUT = NEXT_PROBAS[:]
+    for i in range(len(OUTPUT)):
+        OUTPUT[i] = [x / sum(OUTPUT[i]) for x in OUTPUT[i]]
+    return(OUTPUT) 
+
+
+def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
+    proba = 1
+    n = len(CURRENT[0]) + 1
+    string = SOS_EOS(input_string,n)
+    L = len(string)
+    for i in range(L-n):
+        substring = group_words(string[i:i+n-1])
+        lastword = string[i+n-1]
+        if substring in CURRENT:
+            idx = CURRENT.index(substring)
+            if lastword in CURRENT[idx]:
+                idx_next = CURRENT[idx].index(lastword)
+                p = NEXT_PROBAS[idx][idx_next]
+                proba = proba*p
+    return(proba)
+                
     
