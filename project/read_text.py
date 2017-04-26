@@ -175,9 +175,9 @@ def ngrams_list(splitted_text,n):
     return(CURRENT,NEXT,NEXT_PROBAS)  
 
 def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smoothing_factor) :
-    CURRENT_LAP = CURRENT
-    NEXT_LAP = NEXT
-    NEXT_PROBAS_LAP = NEXT_PROBAS
+    CURRENT_LAP = list(CURRENT)
+    NEXT_LAP = list(NEXT)
+    NEXT_PROBAS_LAP = list(NEXT_PROBAS)
     for c in range(len(CURRENT_LAP)):
         for w in language_dictionnary_keys:
             if w in NEXT_LAP[c]:
@@ -188,7 +188,6 @@ def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smo
                 NEXT_PROBAS_LAP[c].append([smoothing_factor])
     return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
                 
-
 
 splitted = split_txt() 
 dico = language_dictionary(splitted)                     
