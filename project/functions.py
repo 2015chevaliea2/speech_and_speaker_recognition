@@ -50,12 +50,35 @@ def split_txt():
         split = split_sentence(pairs[i])
         ans.append(split)
     return(ans)
+
     
 def language_dictionary(splitted_text,length):
     dictionary = Counter({})
     for i in range(length):
         dictionary = dictionary + Counter(splitted_text[i])
     return(dictionary,list(dictionary.keys()))
+
+# Input : a dictionary retrned by language_dictionary[0]
+def language_dictionary_UNK(dictionary):
+    dictionary_UNK = {'UNK' : 0}
+    for i in dictionary.keys():
+        if dictionary[i] > 1:
+            dictionary_UNK[i] = dictionary[i]-1
+        dictionary_UNK['UNK'] = dictionary_UNK['UNK'] + 1
+    return(dictionary_UNK, list(dictionary_UNK.keys()))
+          
+# Transform the data according to the dictionary_UNK
+# Inputs : a splitted text, a dictionary from language_dictionary_UNK[0]
+def splitted_text_UNK(splitted_text, dictionary_UNK, length):
+    splitted_UNK = []
+    for i in range(length):
+        sentence = list(splitted_text[i])
+        print(sentence)
+        for j in range(len(sentence)):
+            if sentence[j] not in dictionary_UNK.keys():
+                sentence[j] = 'UNK'
+        splitted_UNK.append(sentence)
+    return(splitted_UNK)
     
 def SOS_EOS(splitted_text,n):
     with_SOS_EOS = list(splitted_text)
@@ -63,68 +86,6 @@ def SOS_EOS(splitted_text,n):
         with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] + ['EOS']*(n-1)
     return(with_SOS_EOS)
 
-def bigrams(splitted_text,L):
-    N = len(dictionary)
-    transition_mat = np.zeros((N,N))
-    for i in range(L):
-        sentence = splitted_text[i]
-        for j in range(1,len(sentence)):
-            previous_word = sentence[j-1]        
-            current_word = sentence[j]
-            line = L.index(previous_word)
-            column = L.index(current_word)
-            transition_mat[line,column] += 1 
-    for i in range(N):
-        transition_mat[i,:] = transition_mat[i,:]/np.sum(transition_mat[i,:])
-    return(transition_mat)
-
-#    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
-def bigrams_list(splitted_text,length):
-    CURRENT = []
-    NEXT = []
-    NEXT_PROBAS = []
-    for i in range(length):
-        sentence = splitted_text[i]
-        for j in range(0,len(sentence)-1):
-            current_word = sentence[j]
-            next_word = sentence[j+1]
-            if current_word in CURRENT:
-                idx = CURRENT.index(current_word)
-                if next_word in NEXT[idx]:
-                    idx_next = NEXT[idx].index(next_word)
-                    NEXT_PROBAS[idx][idx_next] = NEXT_PROBAS[idx][idx_next]+1
-                else:
-                    NEXT[idx].append(next_word)
-                    NEXT_PROBAS[idx].append(1)
-            else:
-                CURRENT.append(current_word)
-                NEXT.append([next_word])
-                NEXT_PROBAS.append([1])
-    return(CURRENT,NEXT,NEXT_PROBAS)
-
-#    NOT USEFUL ANYMORE, JUST A SPECIFIC CASE OF ngrams_list
-def trigrams_list(splitted_text,length):
-    CURRENT = []
-    NEXT = []
-    NEXT_PROBAS = []
-    for i in range(length):
-        sentence = splitted_text[i]
-        for j in range(0,len(sentence)-2):
-            current_word = sentence[j]+" "+sentence[j+1]
-            next_word = sentence[j+2]
-            if current_word in CURRENT:
-                idx = CURRENT.index(current_word)
-                if next_word in NEXT[idx]:
-                    idx_next = NEXT[idx].index(next_word)
-                    NEXT_PROBAS[idx][idx_next] = NEXT_PROBAS[idx][idx_next]+1
-                else:
-                    NEXT[idx].append(next_word)
-                    NEXT_PROBAS[idx].append(1)
-            else:
-                CURRENT.append(current_word)
-                NEXT.append([next_word])
-                NEXT_PROBAS.append([1])
-    return(CURRENT,NEXT,NEXT_PROBAS)    
 
 def group_words(L):
     out = L[0]
@@ -159,12 +120,30 @@ def ngrams_list(splitted_text,n,length):
                 NEXT.append([next_word])
                 NEXT_PROBAS.append([1])
     return(CURRENT,NEXT,NEXT_PROBAS)  
-
+#
+#
+#def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smoothing_factor) :
+#    CURRENT_LAP = list(CURRENT)
+#    NEXT_LAP = list(NEXT)
+#    NEXT_PROBAS_LAP = list(NEXT_PROBAS)
+#    for c in range(len(CURRENT_LAP)):
+#        for w in language_dictionnary_keys:
+#            if w in NEXT_LAP[c]:
+#                ind = NEXT_LAP[c].index(w)
+#                NEXT_PROBAS_LAP[c][ind] += smoothing_factor
+#            else:
+#                NEXT_LAP[c].append(w)
+#                NEXT_PROBAS_LAP[c].append(smoothing_factor)
+#    return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
+    
 def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smoothing_factor) :
-    CURRENT_LAP = CURRENT[:]
-    NEXT_LAP = NEXT[:]
-    NEXT_PROBAS_LAP = NEXT_PROBAS[:]
-    for c in range(len(CURRENT_LAP)):
+    CURRENT_LAP = list([])
+    NEXT_LAP = list([])
+    NEXT_PROBAS_LAP = list([])
+    for c in range(len(CURRENT)):
+        CURRENT_LAP.append(CURRENT[c])
+        NEXT_LAP.append(NEXT[c])
+        NEXT_PROBAS_LAP.append(NEXT_PROBAS[c])
         for w in language_dictionnary_keys:
             if w in NEXT_LAP[c]:
                 ind = NEXT_LAP[c].index(w)
@@ -173,7 +152,7 @@ def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smo
                 NEXT_LAP[c].append(w)
                 NEXT_PROBAS_LAP[c].append(smoothing_factor)
     return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
-    
+
 def freq2proba(NEXT_PROBAS):
     OUTPUT = NEXT_PROBAS[:]
     for i in range(len(OUTPUT)):
@@ -202,4 +181,3 @@ def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
                 proba = 0
     return(proba)
                 
-    
