@@ -1,5 +1,4 @@
 import unicodedata
-import string
 import re
 import random
 from class_lang import Lang
@@ -67,7 +66,7 @@ def SOS_EOS(splitted_text,n):
 def bigrams(splitted_text,L):
     N = len(dictionary)
     transition_mat = np.zeros((N,N))
-    for i in range(length):
+    for i in range(L):
         sentence = splitted_text[i]
         for j in range(1,len(sentence)):
             previous_word = sentence[j-1]        
@@ -184,18 +183,23 @@ def freq2proba(NEXT_PROBAS):
 
 def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
     proba = 1
-    n = len(CURRENT[0]) + 1
+    n = len(split_sentence(CURRENT[0])) + 1
     string = SOS_EOS(input_string,n)
-    L = len(string)
+    L = len(string[0])
     for i in range(L-n):
-        substring = group_words(string[i:i+n-1])
-        lastword = string[i+n-1]
+        print(i)
+        substring = group_words(string[0][i:i+n-1])
+        print(substring)
+        lastword = string[0][i+n-1]
         if substring in CURRENT:
             idx = CURRENT.index(substring)
-            if lastword in CURRENT[idx]:
-                idx_next = CURRENT[idx].index(lastword)
+            if lastword in NEXT[idx]:
+                idx_next = NEXT[idx].index(lastword)
                 p = NEXT_PROBAS[idx][idx_next]
+                print(p)
                 proba = proba*p
+            else:
+                proba = 0
     return(proba)
                 
     
