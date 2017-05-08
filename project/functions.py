@@ -80,10 +80,11 @@ def splitted_text_UNK(splitted_text, dictionary_UNK, length):
         splitted_UNK.append(sentence)
     return(splitted_UNK)
     
+# we add n-1 SOS tokens to compute the n-gram probabilities with interpolation and 1 EOS token
 def SOS_EOS(splitted_text,n):
     with_SOS_EOS = list(splitted_text)
     for i in range(len(splitted_text)):
-        with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] + ['EOS']*(n-1)
+        with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] + ['EOS']
     return(with_SOS_EOS)
 
 
@@ -181,3 +182,43 @@ def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
                 proba = 0
     return(proba)
                 
+# Inputs : n_grams is a list whose lines contain the different models (1st line = [CURRENT,NEXT,NEXT_PROBAS] for n=1, etc)
+# lambdas = vector of coefficients of the interpolation, in increasing order of ngrams, from unigram t ngram
+def interpolation(sentence, n_grams, lambdas):
+    lambdas = np.array(lambdas)
+    n = len(lambdas)
+    string = SOS_EOS([split_sentence(sentence)],n)
+    print(string)
+    size = len(string[0])
+    print(size)
+    proba = 1
+    for i in range(n-1,size):
+        print("i = ")
+        print(i)
+        seq = string[0][i-n+1:i+1]
+        print(seq)
+        p = np.zeros((n))
+        for k in range(2, n+1):
+            print("k=")
+            print(k)
+            substring = group_words(seq[n-k:n-1])
+            print(substring)
+            lastword = seq[n-1]
+            if substring in n_grams[k-1][0]:
+                idx = n_grams[k-1][0].index(substring)
+                print("idx=")
+                print(idx)
+                if lastword in n_grams[k-1][1][idx]:
+                    idx_next = n_grams[k-1][1][idx].index(lastword)
+                    p[k-1] = n_grams[k-1][2][idx][idx_next]
+                    print("yes!!")
+                else:
+                    p[k-1] = 0
+            else:
+                p[k-1] = 0
+        idx = n_grams[0][0].index(lastword)
+        p[0] = n_grams[0][2][idx]
+        proba = proba * np.dot(lambdas,p)
+    return(proba)
+    
+    
