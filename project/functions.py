@@ -225,4 +225,35 @@ def interpolation(string, n_grams, lambdas):
         proba = proba * np.dot(lambdas,p)
     return(proba)
     
-    
+def backup(string, n_grams):
+    size = len(string[0])
+    proba = 1
+    n = len(n_grams)
+    for i in range(n-1,size):
+        seq = string[0][i-n+1:i+1]
+        lastword = seq[n-1]
+        flag = True
+        model = n
+        while flag == True and model>1:
+            substring = group_words(seq)
+            if substring in n_grams[model-1][0]:
+                idx = n_grams[model-1][0].index(substring)
+                if lastword in n_grams[model-1][1][idx]:
+                    idx_next = n_grams[model-1][1][idx].index(lastword)
+                    p = n_grams[model-1][2][idx][idx_next]
+                    proba = p*proba
+                    print("yes!!")
+                    flag = False
+                else:
+                    model = model-1
+                    seq = seq[1:len(seq)]
+                    lastword = seq[len(seq)-1]
+            else:
+                model = model-1
+                seq = seq[1:len(seq)]
+                lastword = seq[len(seq)-1]
+        if model == 1:
+             idx = n_grams[0][0].index(lastword)
+             p = n_grams[0][2][idx]
+             proba = proba*p
+    return(proba)
