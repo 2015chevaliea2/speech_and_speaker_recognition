@@ -21,7 +21,8 @@ n_grams = [[c1,[],proba1],[c2,n2,proba2],[c3,n3,proba3]]
 lambdas = np.array([1,1,1])/3
                   
 sentence = "the price of gold is"
-result = interpolation(sentence,n_grams,lambdas)                  
+string = preprocess(sentence,3,dico_UNK[0])
+result = interpolation(string,n_grams,lambdas)                  
 
 #clap,nlap,n_plap = laplace_smoothing(c,n,n_p,dico_UNK[1],1)   
 #n_p_proba = freq2proba(n_p) 

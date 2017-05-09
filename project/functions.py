@@ -73,7 +73,7 @@ def splitted_text_UNK(splitted_text, dictionary_UNK, length):
     splitted_UNK = []
     for i in range(length):
         sentence = list(splitted_text[i])
-        print(sentence)
+#        print(sentence)
         for j in range(len(sentence)):
             if sentence[j] not in dictionary_UNK.keys():
                 sentence[j] = 'UNK'
@@ -84,7 +84,7 @@ def splitted_text_UNK(splitted_text, dictionary_UNK, length):
 def SOS_EOS(splitted_text,n):
     with_SOS_EOS = list(splitted_text)
     for i in range(len(splitted_text)):
-        with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] + ['EOS']
+        with_SOS_EOS[i] = ['SOS']*(n-1) + with_SOS_EOS[i] 
     return(with_SOS_EOS)
 
 
@@ -182,36 +182,40 @@ def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
                 proba = 0
     return(proba)
                 
+def preprocess(sentence, n, dico_UNK):
+    string = splitted_text_UNK([split_sentence(sentence)], dico_UNK, 1)
+    string = SOS_EOS(string,n)
+    return(string)
+
 # Inputs : n_grams is a list whose lines contain the different models (1st line = [CURRENT,NEXT,NEXT_PROBAS] for n=1, etc)
 # lambdas = vector of coefficients of the interpolation, in increasing order of ngrams, from unigram t ngram
-def interpolation(sentence, n_grams, lambdas):
+def interpolation(string, n_grams, lambdas):
     lambdas = np.array(lambdas)
     n = len(lambdas)
-    string = SOS_EOS([split_sentence(sentence)],n)
-    print(string)
+#    print(string)
     size = len(string[0])
-    print(size)
+#    print(size)
     proba = 1
     for i in range(n-1,size):
-        print("i = ")
-        print(i)
+#        print("i = ")
+#        print(i)
         seq = string[0][i-n+1:i+1]
-        print(seq)
+#        print(seq)
         p = np.zeros((n))
         for k in range(2, n+1):
-            print("k=")
-            print(k)
+#            print("k=")
+#            print(k)
             substring = group_words(seq[n-k:n-1])
-            print(substring)
+#            print(substring)
             lastword = seq[n-1]
             if substring in n_grams[k-1][0]:
                 idx = n_grams[k-1][0].index(substring)
-                print("idx=")
-                print(idx)
+#                print("idx=")
+#                print(idx)
                 if lastword in n_grams[k-1][1][idx]:
                     idx_next = n_grams[k-1][1][idx].index(lastword)
                     p[k-1] = n_grams[k-1][2][idx][idx_next]
-                    print("yes!!")
+#                    print("yes!!")
                 else:
                     p[k-1] = 0
             else:
