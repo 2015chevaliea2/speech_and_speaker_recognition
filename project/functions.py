@@ -104,6 +104,8 @@ def ngrams_list(splitted_text,n,length):
     NEXT = []
     NEXT_PROBAS = []
     for i in range(length):
+        if i%1000 == 0:
+            print(i)
         sentence = new_text[i]
         for j in range(0,len(sentence)-(n-1)):
             current_word = group_words(sentence[j:j+n-1])
@@ -154,15 +156,16 @@ def laplace_smoothing(CURRENT, NEXT, NEXT_PROBAS, language_dictionnary_keys, smo
                 NEXT_PROBAS_LAP[c].append(smoothing_factor)
     return (CURRENT_LAP, NEXT_LAP, NEXT_PROBAS_LAP)
 
+# returns log2 probabilities
 def freq2proba(NEXT_PROBAS):
     OUTPUT = NEXT_PROBAS[:]
     for i in range(len(OUTPUT)):
-        OUTPUT[i] = [x / sum(OUTPUT[i]) for x in OUTPUT[i]]
+        OUTPUT[i] = np.log2(np.array([x / sum(OUTPUT[i]) for x in OUTPUT[i]]))
     return(OUTPUT) 
 
 
 def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
-    proba = 1
+    proba = 0
     n = len(split_sentence(CURRENT[0])) + 1
     string = SOS_EOS(input_string,n)
     L = len(string[0])
@@ -177,9 +180,9 @@ def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
                 idx_next = NEXT[idx].index(lastword)
                 p = NEXT_PROBAS[idx][idx_next]
                 print(p)
-                proba = proba*p
+                proba = proba + p
             else:
-                proba = 0
+                proba = -np.inf
     return(proba)
                 
 def preprocess(sentence, n, dico_UNK):
@@ -189,13 +192,14 @@ def preprocess(sentence, n, dico_UNK):
 
 # Inputs : n_grams is a list whose lines contain the different models (1st line = [CURRENT,NEXT,NEXT_PROBAS] for n=1, etc)
 # lambdas = vector of coefficients of the interpolation, in increasing order of ngrams, from unigram t ngram
+# returns a log2 proba
 def interpolation(string, n_grams, lambdas):
     lambdas = np.array(lambdas)
     n = len(lambdas)
 #    print(string)
     size = len(string[0])
 #    print(size)
-    proba = 1
+    proba = 0
     for i in range(n-1,size):
 #        print("i = ")
 #        print(i)
@@ -217,33 +221,37 @@ def interpolation(string, n_grams, lambdas):
                     p[k-1] = n_grams[k-1][2][idx][idx_next]
 #                    print("yes!!")
                 else:
-                    p[k-1] = 0
+                    p[k-1] = -np.inf
             else:
-                p[k-1] = 0
+                p[k-1] = -np.inf
         idx = n_grams[0][0].index(lastword)
         p[0] = n_grams[0][2][idx]
-        proba = proba * np.dot(lambdas,p)
+        proba = proba + np.log2(np.dot(lambdas, np.power(2,p)))
     return(proba)
     
-def backup(string, n_grams):
+# returns a log2 proba
+def backoff(string, n, n_grams):
     size = len(string[0])
-    proba = 1
-    n = len(n_grams)
+    proba = 0
     for i in range(n-1,size):
         seq = string[0][i-n+1:i+1]
+#        print(seq)
         lastword = seq[n-1]
+#        print(lastword)
         flag = True
         model = n
         while flag == True and model>1:
-            substring = group_words(seq)
+            substring = group_words(seq[0:len(seq)-1])
+#            print(substring)
             if substring in n_grams[model-1][0]:
                 idx = n_grams[model-1][0].index(substring)
                 if lastword in n_grams[model-1][1][idx]:
                     idx_next = n_grams[model-1][1][idx].index(lastword)
                     p = n_grams[model-1][2][idx][idx_next]
-                    proba = p*proba
+                    proba = p + proba
                     print("yes!!")
                     flag = False
+                    print(model)
                 else:
                     model = model-1
                     seq = seq[1:len(seq)]
@@ -255,5 +263,21 @@ def backup(string, n_grams):
         if model == 1:
              idx = n_grams[0][0].index(lastword)
              p = n_grams[0][2][idx]
-             proba = proba*p
+             proba = proba + p
+             print(model)
     return(proba)
+
+def perplexity(test_set, n, n_grams,dico_UNK):
+    len_set = len(test_set)
+    p_log_p = np.zeros((len_set))
+    for i in range(len_set):
+        merged_sentence = group_words(test_set[i])
+        string = preprocess(merged_sentence,n,dico_UNK[0])
+        p = backoff(string, n, n_grams)
+        print(p)
+        p_log_p[i] = p*np.power(2,p)
+        print(p_log_p[i])
+    entropy = - np.sum(p_log_p)
+    print(entropy)
+    perp = np.power(2,entropy)
+    return(perp)
