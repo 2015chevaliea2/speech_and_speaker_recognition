@@ -170,16 +170,16 @@ def naive_proba(input_string,CURRENT,NEXT,NEXT_PROBAS):
     string = SOS_EOS(input_string,n)
     L = len(string[0])
     for i in range(L-n):
-        print(i)
+#        print(i)
         substring = group_words(string[0][i:i+n-1])
-        print(substring)
+#        print(substring)
         lastword = string[0][i+n-1]
         if substring in CURRENT:
             idx = CURRENT.index(substring)
             if lastword in NEXT[idx]:
                 idx_next = NEXT[idx].index(lastword)
                 p = NEXT_PROBAS[idx][idx_next]
-                print(p)
+#                print(p)
                 proba = proba + p
             else:
                 proba = -np.inf
@@ -233,6 +233,7 @@ def interpolation(string, n_grams, lambdas):
 def backoff(string, n, n_grams):
     size = len(string[0])
     proba = 0
+    tab = np.zeros((n))
     for i in range(n-1,size):
         seq = string[0][i-n+1:i+1]
 #        print(seq)
@@ -252,6 +253,7 @@ def backoff(string, n, n_grams):
 #                    print("yes!!")
                     flag = False
 #                    print(model)
+                    tab[model-1] = tab[model-1]+1
                 else:
                     model = model-1
                     seq = seq[1:len(seq)]
@@ -260,24 +262,50 @@ def backoff(string, n, n_grams):
                 model = model-1
                 seq = seq[1:len(seq)]
                 lastword = seq[len(seq)-1]
+            
         if model == 1:
              idx = n_grams[0][0].index(lastword)
              p = n_grams[0][2][idx]
              proba = proba + p
+             tab[model-1] = tab[model-1]+1
 #             print(model)
-    return(proba)
+    return(proba, tab)
 
+#def perplexity(test_set, n, n_grams,dico_UNK):
+#    len_set = len(test_set)
+#    p_log_p = np.zeros((len_set))
+#    for i in range(len_set):
+#        merged_sentence = group_words(test_set[i])
+#        string = preprocess(merged_sentence,n,dico_UNK[0])
+#        p = backoff(string, n, n_grams)
+##        print(p)
+#        p_log_p[i] = p*np.power(2,p)
+#        print(p_log_p[i])
+#    entropy = - np.sum(p_log_p)
+##    print(entropy)
+#    perp = np.power(2,entropy)
+#    return(perp)
+    
 def perplexity(test_set, n, n_grams,dico_UNK):
     len_set = len(test_set)
-    p_log_p = np.zeros((len_set))
-    for i in range(len_set):
-        merged_sentence = group_words(test_set[i])
-        string = preprocess(merged_sentence,n,dico_UNK[0])
-        p = backoff(string, n, n_grams)
-#        print(p)
-        p_log_p[i] = p*np.power(2,p)
-#        print(p_log_p[i])
-    entropy = - np.sum(p_log_p)
-#    print(entropy)
-    perp = np.power(2,entropy)
-    return(perp)
+    CUR_test, NEXT_test, NEXT_FREQ_test = ngrams_list(test_set,n,len_set)
+    NEXT_PROBAS_test = freq2proba(NEXT_FREQ_test)#These are log probabilities
+    NEXT_PROBAS_test = np.power(2,NEXT_PROBAS_test)#Probas in non-log form
+    LogQ = []
+    for i in range(len(CUR_test)):
+        LogQi = []
+        for j in range(len(NEXT_test[i])):
+            sentence = group_words([CUR_test[i],NEXT_test[i][j]])
+            string = preprocess(sentence,n,dico_UNK[0])
+            LogProba = backoff(string,n,n_grams)
+            LogQi.append(LogProba)
+        LogQ.append(LogQi)
+    res = 0
+    for i in range(len(NEXT_PROBAS_test)):
+#        print(i)
+        print(np.dot(NEXT_PROBAS_test[i],np.array(LogQ[i])))
+        res = res + np.dot(NEXT_PROBAS_test[i],np.array(LogQ[i]))
+    #-res is the entropy
+    #2^(-res) is the perplexity
+    return(np.power(2,-res))
+        

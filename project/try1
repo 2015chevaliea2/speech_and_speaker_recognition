@@ -1,0 +1,64 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.78,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "what's"
+      }
+     ],
+     "end_time": 1.01
+    },
+    {
+     "start_time": 1.01,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "your"
+      }
+     ],
+     "end_time": 1.17
+    },
+    {
+     "start_time": 1.17,
+     "alternatives": [
+      {
+       "confidence": 0.9992,
+       "word": "name"
+      }
+     ],
+     "end_time": 1.48
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "what's",
+       0.78,
+       1.01
+      ],
+      [
+       "your",
+       1.01,
+       1.17
+      ],
+      [
+       "name",
+       1.17,
+       1.48
+      ]
+     ],
+     "confidence": 0.994,
+     "transcript": "what's your name "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}

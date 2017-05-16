@@ -1,0 +1,107 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.32,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "I"
+      }
+     ],
+     "end_time": 0.45
+    },
+    {
+     "start_time": 0.45,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "usually"
+      }
+     ],
+     "end_time": 1.01
+    },
+    {
+     "start_time": 1.01,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "get"
+      }
+     ],
+     "end_time": 1.24
+    },
+    {
+     "start_time": 1.24,
+     "alternatives": [
+      {
+       "confidence": 0.9991,
+       "word": "up"
+      }
+     ],
+     "end_time": 1.45
+    },
+    {
+     "start_time": 1.71,
+     "alternatives": [
+      {
+       "confidence": 0.9199,
+       "word": "eight"
+      },
+      {
+       "confidence": 0.0335,
+       "word": "ate"
+      },
+      {
+       "confidence": 0.0108,
+       "word": "late"
+      }
+     ],
+     "end_time": 1.98
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "I",
+       0.32,
+       0.45
+      ],
+      [
+       "usually",
+       0.45,
+       1.01
+      ],
+      [
+       "get",
+       1.01,
+       1.24
+      ],
+      [
+       "up",
+       1.24,
+       1.45
+      ],
+      [
+       "at",
+       1.48,
+       1.59
+      ],
+      [
+       "eight",
+       1.71,
+       1.98
+      ]
+     ],
+     "confidence": 0.864,
+     "transcript": "I usually get up at 8 "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}

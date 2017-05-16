@@ -1,0 +1,261 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.4,
+     "alternatives": [
+      {
+       "confidence": 0.3799,
+       "word": "date"
+      },
+      {
+       "confidence": 0.3152,
+       "word": "today"
+      },
+      {
+       "confidence": 0.2048,
+       "word": "did"
+      },
+      {
+       "confidence": 0.0136,
+       "word": "day"
+      }
+     ],
+     "end_time": 0.71
+    },
+    {
+     "start_time": 0.8,
+     "alternatives": [
+      {
+       "confidence": 0.5282,
+       "word": "whether"
+      },
+      {
+       "confidence": 0.324,
+       "word": "weather"
+      },
+      {
+       "confidence": 0.021,
+       "word": "weathered"
+      },
+      {
+       "confidence": 0.0155,
+       "word": "weather's"
+      }
+     ],
+     "end_time": 1.18
+    },
+    {
+     "start_time": 1.2,
+     "alternatives": [
+      {
+       "confidence": 0.3233,
+       "word": "is"
+      },
+      {
+       "confidence": 0.1959,
+       "word": "you"
+      },
+      {
+       "confidence": 0.162,
+       "word": "he"
+      },
+      {
+       "confidence": 0.135,
+       "word": "and"
+      },
+      {
+       "confidence": 0.0833,
+       "word": "to"
+      }
+     ],
+     "end_time": 1.29
+    },
+    {
+     "start_time": 1.56,
+     "alternatives": [
+      {
+       "confidence": 0.5232,
+       "word": "me"
+      },
+      {
+       "confidence": 0.3712,
+       "word": "sunny"
+      },
+      {
+       "confidence": 0.0343,
+       "word": "semi"
+      },
+      {
+       "confidence": 0.0217,
+       "word": "Sammy"
+      },
+      {
+       "confidence": 0.0134,
+       "word": "certainly"
+      }
+     ],
+     "end_time": 1.65
+    },
+    {
+     "start_time": 1.65,
+     "alternatives": [
+      {
+       "confidence": 0.9324,
+       "word": "and"
+      },
+      {
+       "confidence": 0.0469,
+       "word": "an"
+      }
+     ],
+     "end_time": 1.79
+    },
+    {
+     "start_time": 1.79,
+     "alternatives": [
+      {
+       "confidence": 0.935,
+       "word": "I'm"
+      },
+      {
+       "confidence": 0.0295,
+       "word": "I"
+      }
+     ],
+     "end_time": 1.91
+    },
+    {
+     "start_time": 1.91,
+     "alternatives": [
+      {
+       "confidence": 0.9846,
+       "word": "going"
+      }
+     ],
+     "end_time": 2.2
+    },
+    {
+     "start_time": 2.2,
+     "alternatives": [
+      {
+       "confidence": 0.9979,
+       "word": "to"
+      }
+     ],
+     "end_time": 2.33
+    },
+    {
+     "start_time": 2.33,
+     "alternatives": [
+      {
+       "confidence": 0.9412,
+       "word": "ride"
+      },
+      {
+       "confidence": 0.0582,
+       "word": "write"
+      }
+     ],
+     "end_time": 2.63
+    },
+    {
+     "start_time": 2.63,
+     "alternatives": [
+      {
+       "confidence": 0.9906,
+       "word": "my"
+      }
+     ],
+     "end_time": 2.84
+    },
+    {
+     "start_time": 2.87,
+     "alternatives": [
+      {
+       "confidence": 0.9552,
+       "word": "bike"
+      },
+      {
+       "confidence": 0.0405,
+       "word": "like"
+      }
+     ],
+     "end_time": 3.24
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "today",
+       0.4,
+       0.71
+      ],
+      [
+       "the",
+       0.71,
+       0.8
+      ],
+      [
+       "weather",
+       0.8,
+       1.18
+      ],
+      [
+       "and",
+       1.18,
+       1.29
+      ],
+      [
+       "sunny",
+       1.29,
+       1.65
+      ],
+      [
+       "and",
+       1.65,
+       1.79
+      ],
+      [
+       "I'm",
+       1.79,
+       1.92
+      ],
+      [
+       "going",
+       1.92,
+       2.2
+      ],
+      [
+       "to",
+       2.2,
+       2.33
+      ],
+      [
+       "ride",
+       2.33,
+       2.63
+      ],
+      [
+       "my",
+       2.63,
+       2.84
+      ],
+      [
+       "bike",
+       2.87,
+       3.24
+      ]
+     ],
+     "confidence": 0.523,
+     "transcript": "today the weather and sunny and I'm going to ride my bike "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}

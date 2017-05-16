@@ -1,0 +1,133 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.29,
+     "alternatives": [
+      {
+       "confidence": 1,
+       "word": "my"
+      }
+     ],
+     "end_time": 0.5
+    },
+    {
+     "start_time": 0.5,
+     "alternatives": [
+      {
+       "confidence": 0.8714,
+       "word": "bicycle"
+      },
+      {
+       "confidence": 0.1286,
+       "word": "basic"
+      }
+     ],
+     "end_time": 1.32
+    },
+    {
+     "start_time": 1.38,
+     "alternatives": [
+      {
+       "confidence": 0.983,
+       "word": "has"
+      },
+      {
+       "confidence": 0.0124,
+       "word": "as"
+      }
+     ],
+     "end_time": 1.57
+    },
+    {
+     "start_time": 1.57,
+     "alternatives": [
+      {
+       "confidence": 0.9858,
+       "word": "a"
+      }
+     ],
+     "end_time": 1.63
+    },
+    {
+     "start_time": 1.63,
+     "alternatives": [
+      {
+       "confidence": 0.9548,
+       "word": "flat"
+      },
+      {
+       "confidence": 0.0117,
+       "word": "flood"
+      }
+     ],
+     "end_time": 1.95
+    },
+    {
+     "start_time": 2.01,
+     "alternatives": [
+      {
+       "confidence": 0.6405,
+       "word": "tire"
+      },
+      {
+       "confidence": 0.2496,
+       "word": "thank"
+      },
+      {
+       "confidence": 0.0242,
+       "word": "tyre"
+      },
+      {
+       "confidence": 0.0158,
+       "word": "tax"
+      }
+     ],
+     "end_time": 2.19
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "my",
+       0.29,
+       0.5
+      ],
+      [
+       "bicycle",
+       0.5,
+       1.32
+      ],
+      [
+       "has",
+       1.38,
+       1.57
+      ],
+      [
+       "a",
+       1.57,
+       1.63
+      ],
+      [
+       "flat",
+       1.63,
+       1.95
+      ],
+      [
+       "tire",
+       2.01,
+       2.19
+      ]
+     ],
+     "confidence": 0.542,
+     "transcript": "my bicycle has a flat tire "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}
