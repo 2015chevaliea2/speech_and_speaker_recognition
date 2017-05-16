@@ -1,0 +1,118 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.28,
+     "alternatives": [
+      {
+       "confidence": 0.897,
+       "word": "magazine"
+      },
+      {
+       "confidence": 0.0883,
+       "word": "medicine"
+      },
+      {
+       "confidence": 0.0101,
+       "word": "medicina"
+      }
+     ],
+     "end_time": 0.78
+    },
+    {
+     "start_time": 0.78,
+     "alternatives": [
+      {
+       "confidence": 0.7386,
+       "word": "helps"
+      },
+      {
+       "confidence": 0.2542,
+       "word": "hopes"
+      }
+     ],
+     "end_time": 1.29
+    },
+    {
+     "start_time": 1.29,
+     "alternatives": [
+      {
+       "confidence": 0.8119,
+       "word": "relieve"
+      },
+      {
+       "confidence": 0.1583,
+       "word": "relieved"
+      },
+      {
+       "confidence": 0.0131,
+       "word": "relief"
+      }
+     ],
+     "end_time": 1.74
+    },
+    {
+     "start_time": 1.92,
+     "alternatives": [
+      {
+       "confidence": 0.9863,
+       "word": "muscle"
+      }
+     ],
+     "end_time": 2.29
+    },
+    {
+     "start_time": 2.29,
+     "alternatives": [
+      {
+       "confidence": 0.9664,
+       "word": "pain"
+      },
+      {
+       "confidence": 0.0249,
+       "word": "thing"
+      }
+     ],
+     "end_time": 2.69
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "magazine",
+       0.28,
+       0.78
+      ],
+      [
+       "helps",
+       0.78,
+       1.29
+      ],
+      [
+       "relieve",
+       1.29,
+       1.74
+      ],
+      [
+       "muscle",
+       1.92,
+       2.29
+      ],
+      [
+       "pain",
+       2.29,
+       2.69
+      ]
+     ],
+     "confidence": 0.511,
+     "transcript": "magazine helps relieve muscle pain "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}

@@ -1,0 +1,134 @@
+{
+ "results": [
+  {
+   "word_alternatives": [
+    {
+     "start_time": 0.32,
+     "alternatives": [
+      {
+       "confidence": 0.9528,
+       "word": "I'm"
+      },
+      {
+       "confidence": 0.0438,
+       "word": "am"
+      }
+     ],
+     "end_time": 0.53
+    },
+    {
+     "start_time": 0.53,
+     "alternatives": [
+      {
+       "confidence": 0.8591,
+       "word": "tired"
+      },
+      {
+       "confidence": 0.1357,
+       "word": "tell"
+      }
+     ],
+     "end_time": 0.99
+    },
+    {
+     "start_time": 0.99,
+     "alternatives": [
+      {
+       "confidence": 0.6627,
+       "word": "of"
+      },
+      {
+       "confidence": 0.2738,
+       "word": "that"
+      },
+      {
+       "confidence": 0.0425,
+       "word": "that's"
+      }
+     ],
+     "end_time": 1.11
+    },
+    {
+     "start_time": 1.14,
+     "alternatives": [
+      {
+       "confidence": 0.3813,
+       "word": "these"
+      },
+      {
+       "confidence": 0.3613,
+       "word": "this"
+      },
+      {
+       "confidence": 0.1829,
+       "word": "describes"
+      },
+      {
+       "confidence": 0.0466,
+       "word": "his"
+      }
+     ],
+     "end_time": 1.29
+    },
+    {
+     "start_time": 1.29,
+     "alternatives": [
+      {
+       "confidence": 0.3529,
+       "word": "project"
+      },
+      {
+       "confidence": 0.3435,
+       "word": "projects"
+      },
+      {
+       "confidence": 0.1857,
+       "word": "it"
+      },
+      {
+       "confidence": 0.078,
+       "word": "critics"
+      }
+     ],
+     "end_time": 1.95
+    }
+   ],
+   "keywords_result": {},
+   "alternatives": [
+    {
+     "timestamps": [
+      [
+       "I'm",
+       0.32,
+       0.53
+      ],
+      [
+       "tired",
+       0.53,
+       0.99
+      ],
+      [
+       "of",
+       0.99,
+       1.09
+      ],
+      [
+       "this",
+       1.14,
+       1.29
+      ],
+      [
+       "project",
+       1.29,
+       1.95
+      ]
+     ],
+     "confidence": 0.395,
+     "transcript": "I'm tired of this project "
+    }
+   ],
+   "final": true
+  }
+ ],
+ "result_index": 0
+}

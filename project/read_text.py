@@ -21,6 +21,15 @@ s
 #    pickle.dump(n_grams, fp)
 
 #Coefficients of the interpolation
+<<<<<<< HEAD
+lambdas = np.array([1,1,1,1,1])/5
+#       
+n = len(n_grams_model)           
+sentence = "can you tell me where the toilets are"
+string = preprocess(sentence, n, dico_UNK[0])
+result1 = interpolation(string,n_grams_model,lambdas)                  
+result2 = backoff(string, n, n_grams_model)
+=======
 #lambdas = np.array([1,1,1,1,1])/5
 ##       
 #n = len(n_grams_model)           
@@ -28,6 +37,7 @@ s
 #string = preprocess(sentence, n, dico_UNK[0])
 #result1 = interpolation(string,n_grams_model,lambdas)                  
 #result2 = backoff(string, n, n_grams_model)
+>>>>>>> 3ab2db0f1ca6c6857d6ae7b90a102f28b0fa93a2
 
 
 #clap,nlap,n_plap = laplace_smoothing(c,n,n_p,dico_UNK[1],1)   

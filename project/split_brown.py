@@ -1,0 +1,1 @@
+lines = open('brown_corpus.txt', encoding = 'utf-8').read().strip().split('.')
