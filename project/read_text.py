@@ -45,7 +45,7 @@ import pickle
 lambdas = np.array([1,1,1,1,1])/5
 #       
 n = len(n_grams_model)           
-sentence = "the elephant is going in direction"
+sentence = "can you tell me where the toilets are"
 string = preprocess(sentence, n, dico_UNK[0])
 result1 = interpolation(string,n_grams_model,lambdas)                  
 result2 = backoff(string, n, n_grams_model)

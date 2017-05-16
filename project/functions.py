@@ -249,9 +249,9 @@ def backoff(string, n, n_grams):
                     idx_next = n_grams[model-1][1][idx].index(lastword)
                     p = n_grams[model-1][2][idx][idx_next]
                     proba = p + proba
-                    print("yes!!")
+#                    print("yes!!")
                     flag = False
-                    print(model)
+#                    print(model)
                 else:
                     model = model-1
                     seq = seq[1:len(seq)]
@@ -264,7 +264,7 @@ def backoff(string, n, n_grams):
              idx = n_grams[0][0].index(lastword)
              p = n_grams[0][2][idx]
              proba = proba + p
-             print(model)
+#             print(model)
     return(proba)
 
 def perplexity(test_set, n, n_grams,dico_UNK):
@@ -274,10 +274,10 @@ def perplexity(test_set, n, n_grams,dico_UNK):
         merged_sentence = group_words(test_set[i])
         string = preprocess(merged_sentence,n,dico_UNK[0])
         p = backoff(string, n, n_grams)
-        print(p)
+#        print(p)
         p_log_p[i] = p*np.power(2,p)
-        print(p_log_p[i])
+#        print(p_log_p[i])
     entropy = - np.sum(p_log_p)
-    print(entropy)
+#    print(entropy)
     perp = np.power(2,entropy)
     return(perp)
