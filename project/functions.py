@@ -278,6 +278,6 @@ def perplexity(test_set, n, n_grams,dico_UNK):
         p_log_p[i] = p*np.power(2,p)
 #        print(p_log_p[i])
     entropy = - np.sum(p_log_p)
-    print(entropy)
+#    print(entropy)
     perp = np.power(2,entropy)
     return(perp)
